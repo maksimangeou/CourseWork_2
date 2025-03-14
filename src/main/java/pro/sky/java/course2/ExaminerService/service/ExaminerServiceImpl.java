@@ -1,5 +1,6 @@
 package pro.sky.java.course2.ExaminerService.service;
 
+import pro.sky.java.course2.ExaminerService.exception.MuchQualityQuestionException;
 import pro.sky.java.course2.ExaminerService.domain.Question;
 
 import java.util.Collection;
@@ -16,7 +17,7 @@ public class ExaminerServiceImpl implements ExaminerService{
     @Override
     public Collection<Question> getQuestions(int amount) {
         if (amount > questionService.getAll().size()) {
-            throw new IllegalArgumentException("Bad Request");
+            throw new MuchQualityQuestionException();
         }
         Collection<Question> questions = new HashSet<>();
         while (questions.size() < amount) {
