@@ -38,12 +38,19 @@ public class MathQuestionService implements QuestionService{
 
     @Override
     public Collection<Question> getAll() {
-        return questionRepository.getAll();
+        Collection<Question> questions = questionRepository.getAll();
+        if (questions.isEmpty()) {
+            throw new NoSuchQuestionException();
+        }
+        return questions;
     }
 
     @Override
     public Question getRandomQuestion() {
         Collection<Question> questions = questionRepository.getAll();
+        if (questions.isEmpty()) {
+            throw new NoSuchQuestionException();
+        }
         int index = random.nextInt(questions.size());
 
         Iterator<Question> iterator = questions.iterator();

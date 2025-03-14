@@ -10,7 +10,7 @@ import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
 import java.util.*;
 
 @Service
-public class ExaminerServiceImpl implements ExaminerService{
+public class ExaminerServiceImpl implements ExaminerService {
     @Autowired
     @Qualifier("javaQuestionService")
     private final JavaQuestionService javaQuestionService;
@@ -41,6 +41,9 @@ public class ExaminerServiceImpl implements ExaminerService{
     }
 
     public Question getRandomQuestionFromAll(Collection<Question> allQuestion) {
+        if (allQuestion.isEmpty()) {
+            throw new NoSuchQuestionException();
+        }
         int index = new Random().nextInt(allQuestion.size());
         Iterator<Question> iterator = allQuestion.iterator();
         Question result = null;

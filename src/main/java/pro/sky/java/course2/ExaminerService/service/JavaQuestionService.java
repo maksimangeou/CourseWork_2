@@ -47,6 +47,9 @@ public class JavaQuestionService implements QuestionService{
 
     public Question getRandomQuestion() {
         Collection<Question> questions = questionRepository.getAll();
+        if (questions.isEmpty()) {
+            throw new NoSuchQuestionException();
+        }
         int index = random.nextInt(questions.size());
 
         Iterator<Question> iterator = questions.iterator();

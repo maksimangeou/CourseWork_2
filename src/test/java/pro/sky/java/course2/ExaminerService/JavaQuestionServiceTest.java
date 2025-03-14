@@ -1,108 +1,96 @@
 package pro.sky.java.course2.ExaminerService;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.java.course2.ExaminerService.domain.Question;
+import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
 import pro.sky.java.course2.ExaminerService.repository.QuestionRepository;
 import pro.sky.java.course2.ExaminerService.service.JavaQuestionService;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class JavaQuestionServiceTest {
 
     @Mock
-    QuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
+
     @InjectMocks
-    JavaQuestionService javaQuestionService;
+    private JavaQuestionService javaQuestionService;
 
-    @Test
-    void givenQuestionAndAnswer_whenAddInCollection_thenSuccess() {
-        JavaQuestionService javaQuestionService = new JavaQuestionService(questionRepository);
-        javaQuestionService.add("Q1", "A1");
-        javaQuestionService.add("Q2", "A2");
+    private Set<Question> questions;
 
-        Collection<Question> questions = javaQuestionService.getAll();
-        assertEquals(2, questions.size());
+    @BeforeEach
+    void setUp() {
+        questions = new HashSet<>();
+        questions.add(new Question("Q1", "A1"));
+        questions.add(new Question("Q2", "A2"));
     }
 
     @Test
-    void givenQuestion_whenAddInCollection_thenSuccess() {
-        Question question1 = new Question("Q1", "A1");
-        Question question2 = new Question("Q2", "A2");
-        JavaQuestionService javaQuestionService = new JavaQuestionService(questionRepository);
-        javaQuestionService.add(question1);
-        javaQuestionService.add(question2);
+    void givenQuestion_whenAddOne_thenReturnIt() {
+        Question newQuestion = new Question("Q3", "A3");
 
-        Collection<Question> questions = javaQuestionService.getAll();
-        assertEquals(2, questions.size());
+        when(questionRepository.add(newQuestion)).thenReturn(newQuestion);
+
+        Question result = javaQuestionService.add(newQuestion);
+
+        assertEquals(newQuestion, result);
+        verify(questionRepository, times(1)).add(newQuestion);
     }
 
     @Test
-    void givenQuestion_whenRemoveFromCollection_thenSuccess() {
-        JavaQuestionService service = new JavaQuestionService(questionRepository);
-        Question question = service.add("Q1", "A1");
-        service.remove(question);
+    void givenQuestion_whenRemove_thenReturnIt() {
+        Question questionToRemove = new Question("Q1", "A1");
 
-        Collection<Question> questions = service.getAll();
-        assertEquals(0, questions.size());
+        when(questionRepository.remove(questionToRemove)).thenReturn(questionToRemove);
+
+        Question result = javaQuestionService.remove(questionToRemove);
+
+        assertEquals(questionToRemove, result);
+        verify(questionRepository, times(1)).remove(questionToRemove);
     }
 
     @Test
-    void getRandomQuestionWhenNoQuestions() {
-        assertThrows(IllegalArgumentException.class, () -> javaQuestionService.getRandomQuestion());
+    void givenQuestions_whenTakeThemAll_thenReturnThem() {
+        when(questionRepository.getAll()).thenReturn(questions);
+
+        Collection<Question> result = javaQuestionService.getAll();
+
+        assertEquals(questions, result);
+        verify(questionRepository, times(1)).getAll();
     }
 
     @Test
-    void getRandomQuestionWhenOneQuestion() {
-        Question question = new Question("What is Java?", "A programming language");
-        javaQuestionService.add(question);
+    void givenAll_WhenNoQuestionsAvailable_ShouldThrowNoSuchQuestionException() {
+        when(questionRepository.getAll()).thenReturn(new HashSet<>());
 
-        Question randomQuestion = javaQuestionService.getRandomQuestion();
-
-        assertEquals(question, randomQuestion);
+        assertThrows(NoSuchQuestionException.class, () -> javaQuestionService.getAll());
+        verify(questionRepository, times(1)).getAll();
     }
 
     @Test
-    void getRandomQuestionWhenMultipleQuestions() {
-        Set<Question> questions = new HashSet<>();
-        questions.add(new Question("What is Java?", "A programming language"));
-        questions.add(new Question("What is Spring?", "A framework"));
-        questions.add(new Question("What is Maven?", "A build tool"));
+    void givenRandomQuestion_thenReturnRandomQuestion() {
+        when(questionRepository.getAll()).thenReturn(questions);
 
-        for (Question question : questions) {
-            javaQuestionService.add(question);
-        }
+        Question result = javaQuestionService.getRandomQuestion();
 
-        Question randomQuestion = javaQuestionService.getRandomQuestion();
-
-        assertTrue(questions.contains(randomQuestion));
+        assertTrue(questions.contains(result));
+        verify(questionRepository, times(1)).getAll();
     }
 
     @Test
-    void getRandomQuestionDistribution() {
-        Set<Question> questions = new HashSet<>();
-        questions.add(new Question("What is Java?", "A programming language"));
-        questions.add(new Question("What is Spring?", "A framework"));
-        questions.add(new Question("What is Maven?", "A build tool"));
+    void getRandomQuestion_WhenNoQuestionsAvailable_thenThrowNoSuchQuestionException() {
+        when(questionRepository.getAll()).thenReturn(new HashSet<>());
 
-        for (Question question : questions) {
-            javaQuestionService.add(question);
-        }
-
-        int numberOfTests = 1000;
-        Map<Question, Integer> questionCount = new HashMap<>();
-
-        for (int i = 0; i < numberOfTests; i++) {
-            Question randomQuestion = javaQuestionService.getRandomQuestion();
-            questionCount.put(randomQuestion, questionCount.getOrDefault(randomQuestion, 0) + 1);
-        }
-
-        for (Question question : questions) {
-            assertTrue(questionCount.containsKey(question));
-            assertTrue(questionCount.get(question) > 0);
-        }
+        assertThrows(NoSuchQuestionException.class, () -> javaQuestionService.getRandomQuestion());
+        verify(questionRepository, times(1)).getAll();
     }
 }
