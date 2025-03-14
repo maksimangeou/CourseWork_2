@@ -2,6 +2,7 @@ package pro.sky.java.course2.ExaminerService.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.java.course2.ExaminerService.domain.Question;
+import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
 
 import java.util.*;
 
@@ -32,6 +33,9 @@ public class JavaQuestionService implements QuestionService{
 
     @Override
     public Collection<Question> getAll() {
+        if (questions.isEmpty()) {
+            throw new NoSuchQuestionException();
+        }
         return questions;
     }
 

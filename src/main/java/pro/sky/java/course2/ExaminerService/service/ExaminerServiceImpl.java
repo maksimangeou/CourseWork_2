@@ -1,12 +1,13 @@
 package pro.sky.java.course2.ExaminerService.service;
 
+import org.springframework.stereotype.Service;
 import pro.sky.java.course2.ExaminerService.exception.MuchQualityQuestionException;
 import pro.sky.java.course2.ExaminerService.domain.Question;
 
 import java.util.Collection;
 import java.util.HashSet;
 
-
+@Service
 public class ExaminerServiceImpl implements ExaminerService{
     private final QuestionService questionService;
 
