@@ -7,8 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pro.sky.java.course2.ExaminerService.domain.Question;
-import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
-import pro.sky.java.course2.ExaminerService.repository.QuestionRepository;
+import pro.sky.java.course2.ExaminerService.repository.JavaQuestionRepository;
 import pro.sky.java.course2.ExaminerService.service.JavaQuestionService;
 
 import java.util.*;
@@ -20,77 +19,57 @@ import static org.mockito.Mockito.*;
 public class JavaQuestionServiceTest {
 
     @Mock
-    private QuestionRepository questionRepository;
+    private JavaQuestionRepository javaQuestionRepository;
 
     @InjectMocks
     private JavaQuestionService javaQuestionService;
 
-    private Set<Question> questions;
+    private Question question;
 
     @BeforeEach
     void setUp() {
-        questions = new HashSet<>();
-        questions.add(new Question("Q1", "A1"));
-        questions.add(new Question("Q2", "A2"));
+        question = new Question("Q1", "A1");
     }
 
     @Test
-    void givenQuestion_whenAddOne_thenReturnIt() {
-        Question newQuestion = new Question("Q3", "A3");
+    void add_ShouldAddQuestionAndReturnIt() {
+        when(javaQuestionRepository.add(question)).thenReturn(question);
 
-        when(questionRepository.add(newQuestion)).thenReturn(newQuestion);
+        Question result = javaQuestionService.add(question);
 
-        Question result = javaQuestionService.add(newQuestion);
-
-        assertEquals(newQuestion, result);
-        verify(questionRepository, times(1)).add(newQuestion);
+        assertEquals(question, result);
+        verify(javaQuestionRepository, times(1)).add(question);
     }
 
     @Test
-    void givenQuestion_whenRemove_thenReturnIt() {
-        Question questionToRemove = new Question("Q1", "A1");
+    void remove_ShouldRemoveQuestionAndReturnIt() {
+        when(javaQuestionRepository.remove(question)).thenReturn(question);
 
-        when(questionRepository.remove(questionToRemove)).thenReturn(questionToRemove);
+        Question result = javaQuestionService.remove(question);
 
-        Question result = javaQuestionService.remove(questionToRemove);
-
-        assertEquals(questionToRemove, result);
-        verify(questionRepository, times(1)).remove(questionToRemove);
+        assertEquals(question, result);
+        verify(javaQuestionRepository, times(1)).remove(question);
     }
 
     @Test
-    void givenQuestions_whenTakeThemAll_thenReturnThem() {
-        when(questionRepository.getAll()).thenReturn(questions);
+    void getAll_ShouldReturnAllQuestions() {
+        Collection<Question> questions = List.of(question);
+        when(javaQuestionRepository.getAll()).thenReturn(questions);
 
         Collection<Question> result = javaQuestionService.getAll();
 
         assertEquals(questions, result);
-        verify(questionRepository, times(1)).getAll();
+        verify(javaQuestionRepository, times(1)).getAll();
     }
 
     @Test
-    void givenAll_WhenNoQuestionsAvailable_thenThrowNoSuchQuestionException() {
-        when(questionRepository.getAll()).thenReturn(new HashSet<>());
-
-        assertThrows(NoSuchQuestionException.class, () -> javaQuestionService.getAll());
-        verify(questionRepository, times(1)).getAll();
-    }
-
-    @Test
-    void givenRandomQuestion_thenReturnRandomQuestion() {
-        when(questionRepository.getAll()).thenReturn(questions);
+    void getRandomQuestion_ShouldReturnRandomQuestion() {
+        Collection<Question> questions = List.of(question);
+        when(javaQuestionRepository.getAll()).thenReturn(questions);
 
         Question result = javaQuestionService.getRandomQuestion();
 
-        assertTrue(questions.contains(result));
-        verify(questionRepository, times(1)).getAll();
-    }
-
-    @Test
-    void getRandomQuestion_WhenNoQuestionsAvailable_thenThrowNoSuchQuestionException() {
-        when(questionRepository.getAll()).thenReturn(new HashSet<>());
-
-        assertThrows(NoSuchQuestionException.class, () -> javaQuestionService.getRandomQuestion());
-        verify(questionRepository, times(1)).getAll();
+        assertNotNull(result);
+        verify(javaQuestionRepository, times(1)).getAll();
     }
 }

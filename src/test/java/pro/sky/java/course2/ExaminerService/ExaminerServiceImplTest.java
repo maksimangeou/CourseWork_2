@@ -12,9 +12,11 @@ import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
 import pro.sky.java.course2.ExaminerService.service.ExaminerServiceImpl;
 import pro.sky.java.course2.ExaminerService.service.JavaQuestionService;
 import pro.sky.java.course2.ExaminerService.service.MathQuestionService;
+import pro.sky.java.course2.ExaminerService.service.QuestionService;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,6 +46,11 @@ class ExaminerServiceImplTest {
         mathQuestions = new HashSet<>();
         mathQuestions.add(new Question("2 + 2", "4"));
         mathQuestions.add(new Question("3 * 3", "9"));
+
+        Set<QuestionService> questionServices = new HashSet<>(List.of(javaQuestionService, mathQuestionService));
+
+        // Инициализируем коллекцию questionServices в ExaminerServiceImpl
+        examinerService = new ExaminerServiceImpl(questionServices);
     }
 
     @Test
@@ -66,14 +73,11 @@ class ExaminerServiceImplTest {
 
     @Test
     void givenQuestions_whenGetQuestion_thenReturnUniqueQuestions() {
-        // Мокируем поведение сервисов
         when(javaQuestionService.getAll()).thenReturn(javaQuestions);
         when(mathQuestionService.getAll()).thenReturn(mathQuestions);
 
-        // Запрашиваем 4 вопроса
         Collection<Question> questions = examinerService.getQuestions(4);
 
-        // Проверяем, что все вопросы уникальны
         assertEquals(4, questions.size());
         assertEquals(4, new HashSet<>(questions).size()); // Проверка уникальности
     }
