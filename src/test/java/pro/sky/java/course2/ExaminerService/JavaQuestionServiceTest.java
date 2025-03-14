@@ -1,8 +1,10 @@
 package pro.sky.java.course2.ExaminerService;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import pro.sky.java.course2.ExaminerService.domain.Question;
+import pro.sky.java.course2.ExaminerService.repository.QuestionRepository;
 import pro.sky.java.course2.ExaminerService.service.JavaQuestionService;
 
 import java.util.*;
@@ -12,11 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class JavaQuestionServiceTest {
 
     @Mock
+    QuestionRepository questionRepository;
+    @InjectMocks
     JavaQuestionService javaQuestionService;
 
     @Test
     void givenQuestionAndAnswer_whenAddInCollection_thenSuccess() {
-        JavaQuestionService javaQuestionService = new JavaQuestionService();
+        JavaQuestionService javaQuestionService = new JavaQuestionService(questionRepository);
         javaQuestionService.add("Q1", "A1");
         javaQuestionService.add("Q2", "A2");
 
@@ -28,7 +32,7 @@ public class JavaQuestionServiceTest {
     void givenQuestion_whenAddInCollection_thenSuccess() {
         Question question1 = new Question("Q1", "A1");
         Question question2 = new Question("Q2", "A2");
-        JavaQuestionService javaQuestionService = new JavaQuestionService();
+        JavaQuestionService javaQuestionService = new JavaQuestionService(questionRepository);
         javaQuestionService.add(question1);
         javaQuestionService.add(question2);
 
@@ -38,7 +42,7 @@ public class JavaQuestionServiceTest {
 
     @Test
     void givenQuestion_whenRemoveFromCollection_thenSuccess() {
-        JavaQuestionService service = new JavaQuestionService();
+        JavaQuestionService service = new JavaQuestionService(questionRepository);
         Question question = service.add("Q1", "A1");
         service.remove(question);
 

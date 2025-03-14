@@ -8,12 +8,12 @@ import pro.sky.java.course2.ExaminerService.repository.QuestionRepository;
 import java.util.*;
 
 @Service
-public class JavaQuestionService implements QuestionService{
+public class MathQuestionService implements QuestionService{
 
     private final QuestionRepository questionRepository;
     private final Random random = new Random();
 
-    public JavaQuestionService(QuestionRepository questionRepository) {
+    public MathQuestionService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
     }
 
@@ -38,13 +38,10 @@ public class JavaQuestionService implements QuestionService{
 
     @Override
     public Collection<Question> getAll() {
-        Collection<Question> questions = questionRepository.getAll();
-        if (questions.isEmpty()) {
-            throw new NoSuchQuestionException();
-        }
-        return questions;
+        return questionRepository.getAll();
     }
 
+    @Override
     public Question getRandomQuestion() {
         Collection<Question> questions = questionRepository.getAll();
         int index = random.nextInt(questions.size());
