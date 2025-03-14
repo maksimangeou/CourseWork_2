@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.java.course2.ExaminerService.domain.Question;
 import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
 import pro.sky.java.course2.ExaminerService.repository.QuestionRepository;
@@ -38,62 +40,36 @@ public class MathQuestionServiceTest {
     }
 
     @Test
-    void givenQuestion_whenAddOne_thenReturnIt() {
-        Question newQuestion = new Question("Q3", "A3");
-
-        when(questionRepository.add(newQuestion)).thenReturn(newQuestion);
-
-        Question result = mathQuestionService.add(newQuestion);
-
-        assertEquals(newQuestion, result);
-        verify(questionRepository, times(1)).add(newQuestion);
+    void givenQuestion_whenAddOne_thenThrowMethodNotAllowed() {
+        Question question = new Question("Q1", "A1");
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> mathQuestionService.add(question));
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED, exception.getStatusCode());
     }
 
     @Test
-    void givenQuestion_whenRemove_thenReturnIt() {
-        Question questionToRemove = new Question("Q1", "A1");
-
-        when(questionRepository.remove(questionToRemove)).thenReturn(questionToRemove);
-
-        Question result = mathQuestionService.remove(questionToRemove);
-
-        assertEquals(questionToRemove, result);
-        verify(questionRepository, times(1)).remove(questionToRemove);
+    void givenQuestion_whenRemove_thenThrowMethodNotAllowed() {
+        Question question = new Question("Q1", "A1");
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> mathQuestionService.remove(question));
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED, exception.getStatusCode());
     }
 
     @Test
-    void givenQuestions_whenTakeThemAll_thenReturnThem() {
-        when(questionRepository.getAll()).thenReturn(questions);
-
-        Collection<Question> result = mathQuestionService.getAll();
-
-        assertEquals(questions, result);
-        verify(questionRepository, times(1)).getAll();
+    void givenQuestions_whenTakeThemAll_thenThrowMethodNotAllowed() {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> mathQuestionService.getAll());
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED, exception.getStatusCode());
     }
 
     @Test
-    void givenAll_WhenNoQuestionsAvailable_ShouldThrowNoSuchQuestionException() {
-        when(questionRepository.getAll()).thenReturn(new HashSet<>());
-
-        assertThrows(NoSuchQuestionException.class, () -> mathQuestionService.getAll());
-        verify(questionRepository, times(1)).getAll();
+    void givenAll_WhenNoQuestionsAvailable_ShouldThrowMethodNotAllowed() {
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> mathQuestionService.getAll());
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED, exception.getStatusCode());
     }
 
     @Test
     void givenRandomQuestion_thenReturnRandomQuestion() {
-        when(questionRepository.getAll()).thenReturn(questions);
-
-        Question result = mathQuestionService.getRandomQuestion();
-
-        assertTrue(questions.contains(result));
-        verify(questionRepository, times(1)).getAll();
-    }
-
-    @Test
-    void getRandomQuestion_WhenNoQuestionsAvailable_thenThrowNoSuchQuestionException() {
-        when(questionRepository.getAll()).thenReturn(new HashSet<>());
-
-        assertThrows(NoSuchQuestionException.class, () -> mathQuestionService.getRandomQuestion());
-        verify(questionRepository, times(1)).getAll();
+        Question question = mathQuestionService.getRandomQuestion();
+        assertNotNull(question);
+        assertTrue(question.getQuestion().contains(" + "));
+        assertTrue(question.getAnswer().matches("\\d+"));
     }
 }
