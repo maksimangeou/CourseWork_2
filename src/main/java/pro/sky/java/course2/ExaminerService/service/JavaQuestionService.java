@@ -4,12 +4,11 @@ import org.springframework.stereotype.Service;
 import pro.sky.java.course2.ExaminerService.domain.Question;
 import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
 import pro.sky.java.course2.ExaminerService.repository.JavaQuestionRepository;
-import pro.sky.java.course2.ExaminerService.repository.QuestionRepository;
 
 import java.util.*;
 
 @Service("javaQuestionService")
-public class JavaQuestionService implements QuestionService{
+public class JavaQuestionService implements QuestionService {
 
     private final JavaQuestionRepository javaQuestionRepository;
     private final Random random = new Random();
@@ -20,7 +19,7 @@ public class JavaQuestionService implements QuestionService{
 
     @Override
     public Question add(String question, String answer) {
-        Question newQuestion = new Question(question,answer);
+        Question newQuestion = new Question(question, answer);
         javaQuestionRepository.add(newQuestion);
         return newQuestion;
     }

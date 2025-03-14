@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pro.sky.java.course2.ExaminerService.domain.Question;
 import pro.sky.java.course2.ExaminerService.service.JavaQuestionService;
-import pro.sky.java.course2.ExaminerService.service.QuestionService;
 
 import java.util.Collection;
 
