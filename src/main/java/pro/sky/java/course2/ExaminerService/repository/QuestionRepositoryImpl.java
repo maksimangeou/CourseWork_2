@@ -1,5 +1,6 @@
 package pro.sky.java.course2.ExaminerService.repository;
 
+import org.springframework.stereotype.Repository;
 import pro.sky.java.course2.ExaminerService.domain.Question;
 import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
 
@@ -7,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@Repository
 public class QuestionRepositoryImpl implements QuestionRepository {
     private final Set<Question> questions = new HashSet<>();
 

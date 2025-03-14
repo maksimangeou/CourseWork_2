@@ -1,5 +1,7 @@
 package pro.sky.java.course2.ExaminerService.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pro.sky.java.course2.ExaminerService.exception.MuchQualityQuestionException;
 import pro.sky.java.course2.ExaminerService.domain.Question;
@@ -9,10 +11,15 @@ import java.util.*;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService{
+    @Autowired
+    @Qualifier("javaQuestionService")
     private final JavaQuestionService javaQuestionService;
+    @Autowired
+    @Qualifier("mathQuestionService")
     private final MathQuestionService mathQuestionService;
 
-    public ExaminerServiceImpl(JavaQuestionService javaQuestionService, MathQuestionService mathQuestionService) {
+    public ExaminerServiceImpl(JavaQuestionService javaQuestionService,
+                               MathQuestionService mathQuestionService) {
         this.javaQuestionService = javaQuestionService;
         this.mathQuestionService = mathQuestionService;
     }

@@ -7,7 +7,7 @@ import pro.sky.java.course2.ExaminerService.repository.QuestionRepository;
 
 import java.util.*;
 
-@Service
+@Service("mathQuestionService")
 public class MathQuestionService implements QuestionService{
 
     private final QuestionRepository questionRepository;
