@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Repository
-public class QuestionRepositoryImpl implements QuestionRepository {
+public class JavaQuestionRepository implements QuestionRepository {
     private final Set<Question> questions = new HashSet<>();
 
     @Override

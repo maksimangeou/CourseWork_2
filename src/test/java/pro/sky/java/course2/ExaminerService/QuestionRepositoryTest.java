@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import pro.sky.java.course2.ExaminerService.domain.Question;
 import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
 import pro.sky.java.course2.ExaminerService.repository.QuestionRepository;
-import pro.sky.java.course2.ExaminerService.repository.QuestionRepositoryImpl;
+import pro.sky.java.course2.ExaminerService.repository.JavaQuestionRepository;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -19,7 +19,7 @@ public class QuestionRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        questionRepository = new QuestionRepositoryImpl();
+        questionRepository = new JavaQuestionRepository();
         testQuestions = new HashSet<>();
         testQuestions.add(new Question("Q1", "A1"));
         testQuestions.add(new Question("Q2", "A2"));

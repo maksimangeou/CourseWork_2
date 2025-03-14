@@ -3,6 +3,7 @@ package pro.sky.java.course2.ExaminerService.service;
 import org.springframework.stereotype.Service;
 import pro.sky.java.course2.ExaminerService.domain.Question;
 import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
+import pro.sky.java.course2.ExaminerService.repository.MathQuestionRepository;
 import pro.sky.java.course2.ExaminerService.repository.QuestionRepository;
 
 import java.util.*;
@@ -10,35 +11,35 @@ import java.util.*;
 @Service("mathQuestionService")
 public class MathQuestionService implements QuestionService{
 
-    private final QuestionRepository questionRepository;
+    private final MathQuestionRepository mathQuestionRepository;
     private final Random random = new Random();
 
-    public MathQuestionService(QuestionRepository questionRepository) {
-        this.questionRepository = questionRepository;
+    public MathQuestionService(MathQuestionRepository mathQuestionRepository) {
+        this.mathQuestionRepository = mathQuestionRepository;
     }
 
     @Override
     public Question add(String question, String answer) {
         Question newQuestion = new Question(question,answer);
-        questionRepository.add(newQuestion);
+        mathQuestionRepository.add(newQuestion);
         return newQuestion;
     }
 
     @Override
     public Question add(Question question) {
-        questionRepository.add(question);
+        mathQuestionRepository.add(question);
         return question;
     }
 
     @Override
     public Question remove(Question question) {
-        questionRepository.remove(question);
+        mathQuestionRepository.remove(question);
         return question;
     }
 
     @Override
     public Collection<Question> getAll() {
-        Collection<Question> questions = questionRepository.getAll();
+        Collection<Question> questions = mathQuestionRepository.getAll();
         if (questions.isEmpty()) {
             throw new NoSuchQuestionException();
         }
@@ -47,7 +48,7 @@ public class MathQuestionService implements QuestionService{
 
     @Override
     public Question getRandomQuestion() {
-        Collection<Question> questions = questionRepository.getAll();
+        Collection<Question> questions = mathQuestionRepository.getAll();
         if (questions.isEmpty()) {
             throw new NoSuchQuestionException();
         }
