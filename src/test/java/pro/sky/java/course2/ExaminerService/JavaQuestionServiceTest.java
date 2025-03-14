@@ -69,7 +69,7 @@ public class JavaQuestionServiceTest {
     }
 
     @Test
-    void givenAll_WhenNoQuestionsAvailable_ShouldThrowNoSuchQuestionException() {
+    void givenAll_WhenNoQuestionsAvailable_thenThrowNoSuchQuestionException() {
         when(questionRepository.getAll()).thenReturn(new HashSet<>());
 
         assertThrows(NoSuchQuestionException.class, () -> javaQuestionService.getAll());
