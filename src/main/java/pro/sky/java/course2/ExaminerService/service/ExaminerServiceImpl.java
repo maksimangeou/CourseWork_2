@@ -11,31 +11,27 @@ import java.util.*;
 
 @Service
 public class ExaminerServiceImpl implements ExaminerService {
-    @Autowired
-    @Qualifier("javaQuestionService")
-    private final JavaQuestionService javaQuestionService;
-    @Autowired
-    @Qualifier("mathQuestionService")
-    private final MathQuestionService mathQuestionService;
 
-    public ExaminerServiceImpl(JavaQuestionService javaQuestionService,
-                               MathQuestionService mathQuestionService) {
-        this.javaQuestionService = javaQuestionService;
-        this.mathQuestionService = mathQuestionService;
+    private final Set<QuestionService> questionServices;
+
+    public ExaminerServiceImpl(Set<QuestionService> questionServices) {
+        this.questionServices = questionServices;
     }
 
     @Override
     public Collection<Question> getQuestions(int amount) {
-        Set<Question> allQuestion = new HashSet<>();
-        allQuestion.addAll(javaQuestionService.getAll());
-        allQuestion.addAll(mathQuestionService.getAll());
+        Set<Question> allQuestions = new HashSet<>();
+        for (QuestionService service : questionServices) {
+            allQuestions.addAll(service.getAll());
+        }
 
-        if (amount > allQuestion.size()) {
+        if (amount > allQuestions.size()) {
             throw new MuchQualityQuestionException();
         }
-        Collection<Question> questions = new HashSet<>();
+
+        Set<Question> questions = new HashSet<>();
         while (questions.size() < amount) {
-            questions.add(getRandomQuestionFromAll(allQuestion));
+            questions.add(getRandomQuestionFromAll(allQuestions));
         }
         return questions;
     }

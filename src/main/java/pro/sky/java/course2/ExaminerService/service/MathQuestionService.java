@@ -1,69 +1,44 @@
 package pro.sky.java.course2.ExaminerService.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.java.course2.ExaminerService.domain.Question;
 import pro.sky.java.course2.ExaminerService.exception.NoSuchQuestionException;
-import pro.sky.java.course2.ExaminerService.repository.MathQuestionRepository;
 
 import java.util.*;
 
 @Service("mathQuestionService")
 public class MathQuestionService implements QuestionService {
 
-    private final MathQuestionRepository mathQuestionRepository;
     private final Random random = new Random();
-
-    public MathQuestionService(MathQuestionRepository mathQuestionRepository) {
-        this.mathQuestionRepository = mathQuestionRepository;
-    }
 
     @Override
     public Question add(String question, String answer) {
-        Question newQuestion = new Question(question, answer);
-        mathQuestionRepository.add(newQuestion);
-        return newQuestion;
+        throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Добавление вопросов по математике невозможно");
     }
 
     @Override
     public Question add(Question question) {
-        mathQuestionRepository.add(question);
-        return question;
+        throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Добавление вопросов по математике невозможно");
     }
 
     @Override
     public Question remove(Question question) {
-        mathQuestionRepository.remove(question);
-        return question;
+        throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Удаление вопросов по математике невозможно");
     }
 
     @Override
     public Collection<Question> getAll() {
-        Collection<Question> questions = mathQuestionRepository.getAll();
-        if (questions.isEmpty()) {
-            throw new NoSuchQuestionException();
-        }
-        return questions;
+        throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Вопросы по математике не доступны");
     }
 
     @Override
     public Question getRandomQuestion() {
-        Collection<Question> questions = mathQuestionRepository.getAll();
-        if (questions.isEmpty()) {
-            throw new NoSuchQuestionException();
-        }
-        int index = random.nextInt(questions.size());
-
-        Iterator<Question> iterator = questions.iterator();
-        Question result = null;
-
-        for (int i = 0; i <= index; i++) {
-            if (iterator.hasNext()) {
-                result = iterator.next();
-            } else {
-                throw new NoSuchQuestionException();
-            }
-        }
-
-        return result;
+        int a = random.nextInt(100);
+        int b = random.nextInt(100);
+        String question = a + " + " + b + " = ?";
+        String answer = String.valueOf(a + b);
+        return new Question(question, answer);
     }
 }
