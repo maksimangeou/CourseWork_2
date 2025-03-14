@@ -1,7 +1,5 @@
 package pro.sky.java.course2.ExaminerService.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import pro.sky.java.course2.ExaminerService.exception.MuchQualityQuestionException;
 import pro.sky.java.course2.ExaminerService.domain.Question;
