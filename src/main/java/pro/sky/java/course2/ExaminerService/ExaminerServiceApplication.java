@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ExaminerServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ExaminerServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ExaminerServiceApplication.class, args);
+    }
 
 }
